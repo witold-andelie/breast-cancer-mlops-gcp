@@ -1,0 +1,4 @@
+slice,n,malignant_cnt,accuracy,recall_M,precision_M,tp,fp,tn,fn
+radius_worst=low,101,1,1.0,1.0,1.0,1,0,100,0
+radius_worst=mid,113,20,1.0,1.0,1.0,20,0,93,0
+radius_worst=high,119,112,1.0,1.0,1.0,112,0,7,0

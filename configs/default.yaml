@@ -1,0 +1,55 @@
+data:
+  uri: "data/Cancer_Data.csv"
+  id_col: "id_pat"
+  target_col: "diagnosis"
+  positive_label: "M"
+  train_pct: 70
+  hash_mod: 100
+
+features:
+  keep_first:
+    - "radius_worst"
+  collinearity_threshold: 0.85
+  max_features: 6
+  bin_feature: "radius_worst"
+  bin_labels:
+    - "low"
+    - "mid"
+    - "high"
+
+unsupervised:
+  pca_variance_threshold: 0.95
+  kmeans_k_min: 2
+  kmeans_k_max: 8
+  isolation_contamination: 0.05
+  random_state: 42
+
+training:
+  cv_folds: 5
+  random_state: 42
+  recall_target: 0.96
+  f_beta: 2.0
+  chaid:
+    n_bins: 10
+    alpha_merge: 0.05
+    alpha_split: 0.05
+    max_depth: 4
+    min_child: 40
+    bonferroni: true
+
+quality_gate:
+  min_recall_m: 0.95
+  min_roc_auc: 0.98
+  max_brier_score: 0.06
+
+monitoring:
+  psi_moderate: 0.10
+  psi_significant: 0.25
+  z_score_alert: 3.5
+  n_bins: 10
+
+artifacts:
+  root_dir: "artifacts"
+  db_file: "artifacts/mlops.db"
+  registry_dir: "artifacts/registry"
+  reports_dir: "artifacts/reports"

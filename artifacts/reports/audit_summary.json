@@ -1,0 +1,486 @@
+{
+  "data_uri": "D:\\CS_materials\\data-mining\\semester_project\\cancer_mlops\\data\\Cancer_Data.csv",
+  "data_sha256": "aa47becd63cb0ef6f9fd7457bbc67be1bb0d58da61fd341dd0981cbbe75dc2c9",
+  "schema": {
+    "n_rows": 1138,
+    "n_cols": 34,
+    "n_numeric_features": 30,
+    "unique_feature_vectors": 569,
+    "total_nulls": 0,
+    "class_counts": {
+      "B": 714,
+      "M": 424
+    }
+  },
+  "train_rows": 805,
+  "test_rows": 333,
+  "raw_numeric_features": [
+    "radius_mean",
+    "texture_mean",
+    "perimeter_mean",
+    "area_mean",
+    "smoothness_mean",
+    "compactness_mean",
+    "concavity_mean",
+    "concave_points_mean",
+    "symmetry_mean",
+    "fractal_dimension_mean",
+    "radius_se",
+    "texture_se",
+    "perimeter_se",
+    "area_se",
+    "smoothness_se",
+    "compactness_se",
+    "concavity_se",
+    "concave_points_se",
+    "symmetry_se",
+    "fractal_dimension_se",
+    "radius_worst",
+    "texture_worst",
+    "perimeter_worst",
+    "area_worst",
+    "smoothness_worst",
+    "compactness_worst",
+    "concavity_worst",
+    "concave_points_worst",
+    "symmetry_worst",
+    "fractal_dimension_worst"
+  ],
+  "sql_audit": {
+    "class_distribution": [
+      {
+        "diagnosis": "B",
+        "n": 714,
+        "pct": 62.74
+      },
+      {
+        "diagnosis": "M",
+        "n": 424,
+        "pct": 37.26
+      }
+    ],
+    "missing_summary": [
+      {
+        "column_name": "area_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "area_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "area_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "compactness_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "compactness_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "compactness_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "concave_points_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "concave_points_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "concave_points_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "concavity_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "concavity_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "concavity_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "fractal_dimension_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "fractal_dimension_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "fractal_dimension_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "perimeter_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "perimeter_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "perimeter_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "radius_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "radius_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "radius_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "smoothness_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "smoothness_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "smoothness_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "symmetry_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "symmetry_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "symmetry_worst",
+        "n_null": 0
+      },
+      {
+        "column_name": "texture_mean",
+        "n_null": 0
+      },
+      {
+        "column_name": "texture_se",
+        "n_null": 0
+      },
+      {
+        "column_name": "texture_worst",
+        "n_null": 0
+      }
+    ],
+    "numeric_profile": [
+      {
+        "column_name": "area_mean",
+        "min_v": 143.5,
+        "median_v": 551.1,
+        "max_v": 2501.0,
+        "mean_v": 654.8891,
+        "sd": 351.7593,
+        "skew": 1.6436
+      },
+      {
+        "column_name": "area_se",
+        "min_v": 6.802,
+        "median_v": 24.53,
+        "max_v": 542.2,
+        "mean_v": 40.3371,
+        "sd": 45.471,
+        "skew": 5.44
+      },
+      {
+        "column_name": "area_worst",
+        "min_v": 185.2,
+        "median_v": 686.5,
+        "max_v": 4254.0,
+        "mean_v": 880.5831,
+        "sd": 569.1066,
+        "skew": 1.8569
+      },
+      {
+        "column_name": "compactness_mean",
+        "min_v": 0.019,
+        "median_v": 0.093,
+        "max_v": 0.345,
+        "mean_v": 0.1044,
+        "sd": 0.0528,
+        "skew": 1.1868
+      },
+      {
+        "column_name": "compactness_se",
+        "min_v": 0.002,
+        "median_v": 0.02,
+        "max_v": 0.135,
+        "mean_v": 0.0255,
+        "sd": 0.0179,
+        "skew": 1.8983
+      },
+      {
+        "column_name": "compactness_worst",
+        "min_v": 0.027,
+        "median_v": 0.212,
+        "max_v": 1.058,
+        "mean_v": 0.2543,
+        "sd": 0.1573,
+        "skew": 1.4713
+      },
+      {
+        "column_name": "concave_points_mean",
+        "min_v": 0.0,
+        "median_v": 0.034,
+        "max_v": 0.201,
+        "mean_v": 0.0489,
+        "sd": 0.0388,
+        "skew": 1.1671
+      },
+      {
+        "column_name": "concave_points_se",
+        "min_v": 0.0,
+        "median_v": 0.011,
+        "max_v": 0.053,
+        "mean_v": 0.0118,
+        "sd": 0.0062,
+        "skew": 1.4286
+      },
+      {
+        "column_name": "concave_points_worst",
+        "min_v": 0.0,
+        "median_v": 0.1,
+        "max_v": 0.291,
+        "mean_v": 0.1146,
+        "sd": 0.0657,
+        "skew": 0.4921
+      },
+      {
+        "column_name": "concavity_mean",
+        "min_v": 0.0,
+        "median_v": 0.062,
+        "max_v": 0.427,
+        "mean_v": 0.0888,
+        "sd": 0.0797,
+        "skew": 1.3991
+      },
+      {
+        "column_name": "concavity_se",
+        "min_v": 0.0,
+        "median_v": 0.026,
+        "max_v": 0.396,
+        "mean_v": 0.0319,
+        "sd": 0.0302,
+        "skew": 5.1022
+      },
+      {
+        "column_name": "concavity_worst",
+        "min_v": 0.0,
+        "median_v": 0.227,
+        "max_v": 1.252,
+        "mean_v": 0.2722,
+        "sd": 0.2085,
+        "skew": 1.1487
+      },
+      {
+        "column_name": "fractal_dimension_mean",
+        "min_v": 0.05,
+        "median_v": 0.062,
+        "max_v": 0.097,
+        "mean_v": 0.0628,
+        "sd": 0.0071,
+        "skew": 1.2892
+      },
+      {
+        "column_name": "fractal_dimension_se",
+        "min_v": 0.001,
+        "median_v": 0.003,
+        "max_v": 0.03,
+        "mean_v": 0.0038,
+        "sd": 0.0027,
+        "skew": 3.8724
+      },
+      {
+        "column_name": "fractal_dimension_worst",
+        "min_v": 0.055,
+        "median_v": 0.08,
+        "max_v": 0.207,
+        "mean_v": 0.0839,
+        "sd": 0.0181,
+        "skew": 1.6526
+      },
+      {
+        "column_name": "perimeter_mean",
+        "min_v": 43.79,
+        "median_v": 86.24,
+        "max_v": 188.5,
+        "mean_v": 91.969,
+        "sd": 24.2883,
+        "skew": 0.9893
+      },
+      {
+        "column_name": "perimeter_se",
+        "min_v": 0.757,
+        "median_v": 2.287,
+        "max_v": 21.98,
+        "mean_v": 2.8661,
+        "sd": 2.021,
+        "skew": 3.4391
+      },
+      {
+        "column_name": "perimeter_worst",
+        "min_v": 50.41,
+        "median_v": 97.66,
+        "max_v": 251.2,
+        "mean_v": 107.2612,
+        "sd": 33.5878,
+        "skew": 1.1267
+      },
+      {
+        "column_name": "radius_mean",
+        "min_v": 6.981,
+        "median_v": 13.37,
+        "max_v": 28.11,
+        "mean_v": 14.1273,
+        "sd": 3.5225,
+        "skew": 0.9411
+      },
+      {
+        "column_name": "radius_se",
+        "min_v": 0.112,
+        "median_v": 0.324,
+        "max_v": 2.873,
+        "mean_v": 0.4052,
+        "sd": 0.2772,
+        "skew": 3.084
+      },
+      {
+        "column_name": "radius_worst",
+        "min_v": 7.93,
+        "median_v": 14.97,
+        "max_v": 36.04,
+        "mean_v": 16.2692,
+        "sd": 4.8311,
+        "skew": 1.1017
+      },
+      {
+        "column_name": "smoothness_mean",
+        "min_v": 0.053,
+        "median_v": 0.096,
+        "max_v": 0.163,
+        "mean_v": 0.0964,
+        "sd": 0.014,
+        "skew": 0.4551
+      },
+      {
+        "column_name": "smoothness_se",
+        "min_v": 0.002,
+        "median_v": 0.006,
+        "max_v": 0.031,
+        "mean_v": 0.007,
+        "sd": 0.003,
+        "skew": 2.2353
+      },
+      {
+        "column_name": "smoothness_worst",
+        "min_v": 0.071,
+        "median_v": 0.131,
+        "max_v": 0.223,
+        "mean_v": 0.1324,
+        "sd": 0.0228,
+        "skew": 0.4131
+      },
+      {
+        "column_name": "symmetry_mean",
+        "min_v": 0.106,
+        "median_v": 0.179,
+        "max_v": 0.304,
+        "mean_v": 0.1812,
+        "sd": 0.0274,
+        "skew": 0.7263
+      },
+      {
+        "column_name": "symmetry_se",
+        "min_v": 0.008,
+        "median_v": 0.019,
+        "max_v": 0.079,
+        "mean_v": 0.0206,
+        "sd": 0.0083,
+        "skew": 2.1795
+      },
+      {
+        "column_name": "symmetry_worst",
+        "min_v": 0.157,
+        "median_v": 0.282,
+        "max_v": 0.664,
+        "mean_v": 0.2901,
+        "sd": 0.0618,
+        "skew": 1.4324
+      },
+      {
+        "column_name": "texture_mean",
+        "min_v": 9.71,
+        "median_v": 18.84,
+        "max_v": 39.28,
+        "mean_v": 19.2896,
+        "sd": 4.2991,
+        "skew": 0.6496
+      },
+      {
+        "column_name": "texture_se",
+        "min_v": 0.36,
+        "median_v": 1.108,
+        "max_v": 4.885,
+        "mean_v": 1.2169,
+        "sd": 0.5514,
+        "skew": 1.6442
+      },
+      {
+        "column_name": "texture_worst",
+        "min_v": 12.02,
+        "median_v": 25.41,
+        "max_v": 49.54,
+        "mean_v": 25.6772,
+        "sd": 6.1436,
+        "skew": 0.4977
+      }
+    ],
+    "iqr_outliers": [
+      {
+        "n_out_area_mean": 50.0,
+        "n_out_area_se": 130.0,
+        "n_out_texture_mean": 14.0
+      }
+    ]
+  },
+  "partition_counts": [
+    {
+      "partition": "test",
+      "diagnosis": "B",
+      "n": 200
+    },
+    {
+      "partition": "test",
+      "diagnosis": "M",
+      "n": 133
+    },
+    {
+      "partition": "train",
+      "diagnosis": "B",
+      "n": 514
+    },
+    {
+      "partition": "train",
+      "diagnosis": "M",
+      "n": 291
+    }
+  ]
+}

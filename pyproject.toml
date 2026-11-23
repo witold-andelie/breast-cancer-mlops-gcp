@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=70.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cancer-mlops"
+version = "0.1.0"
+description = "Production-ready Breast Cancer MLOps pipeline with DuckDB, Scikit-Learn, CHAID, Unsupervised Analysis, SQLite Registry, Drift Monitoring, FastAPI, and GCP Blueprint"
+requires-python = ">=3.11"
+dependencies = [
+    "duckdb>=1.0",
+    "pandas>=2.2",
+    "numpy>=2.0",
+    "scipy>=1.14",
+    "scikit-learn>=1.5",
+    "statsmodels>=0.14",
+    "matplotlib>=3.8",
+    "joblib>=1.4",
+    "pydantic>=2.7",
+    "PyYAML>=6.0",
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "httpx>=0.27",
+    "ruff>=0.8",
+]
+gcp = [
+    "google-cloud-storage>=2.18",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]

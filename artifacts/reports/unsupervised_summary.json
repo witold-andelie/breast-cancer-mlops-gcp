@@ -1,0 +1,112 @@
+{
+  "pca": {
+    "n_features": 30,
+    "n_components_90pct": 7,
+    "n_components_95pct": 10,
+    "pc1_var_ratio": 0.4509,
+    "pc2_var_ratio": 0.1785,
+    "pc1_top_loadings": [
+      {
+        "feature": "concave_points_mean",
+        "loading": 0.2587
+      },
+      {
+        "feature": "concavity_mean",
+        "loading": 0.2567
+      },
+      {
+        "feature": "concave_points_worst",
+        "loading": 0.2498
+      },
+      {
+        "feature": "compactness_mean",
+        "loading": 0.2387
+      },
+      {
+        "feature": "perimeter_worst",
+        "loading": 0.2359
+      }
+    ],
+    "pc2_top_loadings": [
+      {
+        "feature": "fractal_dimension_mean",
+        "loading": 0.3736
+      },
+      {
+        "feature": "fractal_dimension_se",
+        "loading": 0.2854
+      },
+      {
+        "feature": "fractal_dimension_worst",
+        "loading": 0.2776
+      },
+      {
+        "feature": "radius_mean",
+        "loading": -0.2396
+      },
+      {
+        "feature": "area_mean",
+        "loading": -0.2358
+      }
+    ]
+  },
+  "kmeans": {
+    "k_sweep": [
+      {
+        "k": 2,
+        "inertia": 16302.512470310725,
+        "silhouette": 0.3488
+      },
+      {
+        "k": 3,
+        "inertia": 14271.936052630444,
+        "silhouette": 0.3149
+      },
+      {
+        "k": 4,
+        "inertia": 13135.275343521595,
+        "silhouette": 0.2803
+      },
+      {
+        "k": 5,
+        "inertia": 12122.22150049521,
+        "silhouette": 0.1577
+      },
+      {
+        "k": 6,
+        "inertia": 11282.831597807297,
+        "silhouette": 0.1664
+      },
+      {
+        "k": 7,
+        "inertia": 10609.587162906262,
+        "silhouette": 0.1582
+      },
+      {
+        "k": 8,
+        "inertia": 10119.962926295248,
+        "silhouette": 0.1493
+      }
+    ],
+    "best_k_by_silhouette": 2,
+    "best_silhouette": 0.3488,
+    "k2_posthoc_alignment": {
+      "train_ari": 0.6627,
+      "train_nmi": 0.5393,
+      "test_ari": 0.6507,
+      "test_nmi": 0.534
+    }
+  },
+  "isolation_forest": {
+    "contamination": 0.05,
+    "train_anomalies": 41,
+    "train_anomaly_rate": 0.0509,
+    "test_anomalies": 25,
+    "test_anomaly_rate": 0.0751,
+    "train_malignant_rate_in_anomalies": 0.7561,
+    "train_malignant_rate_in_normal": 0.3403,
+    "test_malignant_rate_in_anomalies": 0.68,
+    "train_iqr_area_se_outliers": 90,
+    "overlap_with_area_se_iqr": 21
+  }
+}

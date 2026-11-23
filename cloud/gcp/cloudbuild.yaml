@@ -1,0 +1,53 @@
+substitutions:
+  _REGION: europe-west3
+  _REPO: mlops-repo
+  _SERVICE: cancer-mlops-api
+
+steps:
+  - name: python:3.13-slim
+    id: lint-and-test
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        pip install --no-cache-dir -r requirements.txt
+        PYTHONPATH=src ruff check src tests
+        PYTHONPATH=src pytest -v
+
+  - name: gcr.io/cloud-builders/docker
+    id: build-image
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    id: push-image
+    args:
+      - push
+      - --all-tags
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: deploy-cloud-run
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA
+      - --region=${_REGION}
+      - --platform=managed
+      - --port=8080
+      - --cpu=1
+      - --memory=1Gi
+      - --min-instances=0
+      - --max-instances=3
+      - --allow-unauthenticated
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:$COMMIT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/${_SERVICE}:latest

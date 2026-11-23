@@ -1,0 +1,219 @@
+{
+  "n_samples": 333,
+  "overall_status": "stable",
+  "max_psi": 0.078969,
+  "significant_drift_features": [],
+  "moderate_drift_features": [],
+  "features": {
+    "radius_mean": {
+      "psi": 0.06151,
+      "ks_stat": 0.0671,
+      "ks_pvalue": 0.8475,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "texture_mean": {
+      "psi": 0.022131,
+      "ks_stat": 0.0325,
+      "ks_pvalue": 1.0,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "perimeter_mean": {
+      "psi": 0.074498,
+      "ks_stat": 0.065,
+      "ks_pvalue": 0.8724,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "area_mean": {
+      "psi": 0.062212,
+      "ks_stat": 0.0611,
+      "ks_pvalue": 0.9131,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "smoothness_mean": {
+      "psi": 0.051058,
+      "ks_stat": 0.0381,
+      "ks_pvalue": 0.9996,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "compactness_mean": {
+      "psi": 0.031828,
+      "ks_stat": 0.0689,
+      "ks_pvalue": 0.8258,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "concavity_mean": {
+      "psi": 0.045755,
+      "ks_stat": 0.0689,
+      "ks_pvalue": 0.8258,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "concave_points_mean": {
+      "psi": 0.026126,
+      "ks_stat": 0.0671,
+      "ks_pvalue": 0.8483,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "symmetry_mean": {
+      "psi": 0.049676,
+      "ks_stat": 0.0797,
+      "ks_pvalue": 0.6732,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "fractal_dimension_mean": {
+      "psi": 0.031933,
+      "ks_stat": 0.0313,
+      "ks_pvalue": 1.0,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "radius_se": {
+      "psi": 0.027657,
+      "ks_stat": 0.0273,
+      "ks_pvalue": 1.0,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "texture_se": {
+      "psi": 0.011536,
+      "ks_stat": 0.0479,
+      "ks_pvalue": 0.9897,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "perimeter_se": {
+      "psi": 0.010939,
+      "ks_stat": 0.0342,
+      "ks_pvalue": 0.9999,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "area_se": {
+      "psi": 0.025052,
+      "ks_stat": 0.0395,
+      "ks_pvalue": 0.9992,
+      "out_of_range_pct": 0.006,
+      "status": "stable"
+    },
+    "smoothness_se": {
+      "psi": 0.023447,
+      "ks_stat": 0.0596,
+      "ks_pvalue": 0.9267,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "compactness_se": {
+      "psi": 0.046633,
+      "ks_stat": 0.0672,
+      "ks_pvalue": 0.8465,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "concavity_se": {
+      "psi": 0.056531,
+      "ks_stat": 0.0542,
+      "ks_pvalue": 0.9652,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "concave_points_se": {
+      "psi": 0.023761,
+      "ks_stat": 0.0336,
+      "ks_pvalue": 1.0,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "symmetry_se": {
+      "psi": 0.022462,
+      "ks_stat": 0.0318,
+      "ks_pvalue": 1.0,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "fractal_dimension_se": {
+      "psi": 0.008224,
+      "ks_stat": 0.0318,
+      "ks_pvalue": 1.0,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "radius_worst": {
+      "psi": 0.060703,
+      "ks_stat": 0.065,
+      "ks_pvalue": 0.8724,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "texture_worst": {
+      "psi": 0.029191,
+      "ks_stat": 0.0544,
+      "ks_pvalue": 0.9639,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "perimeter_worst": {
+      "psi": 0.047903,
+      "ks_stat": 0.0555,
+      "ks_pvalue": 0.9575,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "area_worst": {
+      "psi": 0.056632,
+      "ks_stat": 0.0551,
+      "ks_pvalue": 0.9597,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "smoothness_worst": {
+      "psi": 0.078969,
+      "ks_stat": 0.0516,
+      "ks_pvalue": 0.9776,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "compactness_worst": {
+      "psi": 0.070406,
+      "ks_stat": 0.0844,
+      "ks_pvalue": 0.6022,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "concavity_worst": {
+      "psi": 0.067983,
+      "ks_stat": 0.0919,
+      "ks_pvalue": 0.4952,
+      "out_of_range_pct": 0.006,
+      "status": "stable"
+    },
+    "concave_points_worst": {
+      "psi": 0.040046,
+      "ks_stat": 0.0801,
+      "ks_pvalue": 0.6662,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "symmetry_worst": {
+      "psi": 0.060323,
+      "ks_stat": 0.0747,
+      "ks_pvalue": 0.7454,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    },
+    "fractal_dimension_worst": {
+      "psi": 0.049151,
+      "ks_stat": 0.0608,
+      "ks_pvalue": 0.9161,
+      "out_of_range_pct": 0.0,
+      "status": "stable"
+    }
+  }
+}
