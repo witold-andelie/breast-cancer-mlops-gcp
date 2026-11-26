@@ -3,6 +3,7 @@ data:
   id_col: "id_pat"
   target_col: "diagnosis"
   positive_label: "M"
+  deduplicate_features: true
   train_pct: 70
   hash_mod: 100
 

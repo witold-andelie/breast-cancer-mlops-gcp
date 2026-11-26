@@ -37,7 +37,7 @@ uvicorn cancer_mlops.api:app --host 0.0.0.0 --port 8080
 
 ## 3. Non-Negotiable ML & Engineering Invariants
 
-1. **Zero Test-Set Leakage**: Any statistics (`CollinearityPruner`, `QuantileBinner`, `DataFrameStandardScaler`, `PCA`, `KMeans`, `IsolationForest`, `optimize_threshold`, `compute_baseline_stats`) MUST fit strictly on `train_df` or CV out-of-fold predictions inside `train_df`. Never compute quantiles, correlations, or thresholds across the combined dataset.
+1. **Pre-Split Feature Deduplication & Zero Test-Set Leakage**: Always deduplicate exact duplicate feature vectors (`data.deduplicate_features: true`) before partitioning so paired records (`A*`/`B*`) never leak across train/test. All statistics (`CollinearityPruner`, `QuantileBinner`, `DataFrameStandardScaler`, `PCA`, `KMeans`, `IsolationForest`, `optimize_threshold`, `compute_baseline_stats`) MUST fit strictly on `train_df` or CV out-of-fold predictions inside `train_df`. Never compute quantiles, correlations, or thresholds across the combined dataset.
 2. **Deterministic Reproducibility**: Partitioning must use DuckDB `hash(id_pat) % hash_mod < train_pct`, never Python's salted `hash()` or unseeded random splits.
 3. **Config-Driven Thresholds**: Do not hardcode decision thresholds, feature lists, or paths inside modules; read from `configs/default.yaml` via `load_config()`.
 4. **Quality Gate Enforcement**: Never promote a model to `production` if `Recall_M < min_recall_m`, `ROC-AUC < min_roc_auc`, `Brier > max_brier_score`, or predictions contain non-finite values.

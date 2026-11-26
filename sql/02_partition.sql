@@ -4,7 +4,7 @@ SELECT *,
        CASE WHEN {{target_col}} = '{{positive_label}}' THEN 1 ELSE 0 END AS y_m,
        CASE WHEN CAST(hash({{id_col}}) AS UBIGINT) % {{hash_mod}} < {{train_pct}}
             THEN 'train' ELSE 'test' END AS partition
-FROM src;
+FROM src_clean;
 
 -- NAME: partition_counts
 SELECT partition,

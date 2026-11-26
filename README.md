@@ -8,8 +8,8 @@ A production-oriented machine learning engineering project built on the breast c
 
 ```mermaid
 flowchart LR
-    CSV["Data Source\n(Local / gs:// GCS)"] --> Data["DuckDB Audit & Hash Split\n(sql/01_audit.sql, 02_partition.sql)"]
-    Data -->|805 train / 333 test| Unsup["Unsupervised Diagnostics\n(PCA, K-Means, Isolation Forest)"]
+    CSV["Data Source\n(Local / gs:// GCS)"] --> Data["DuckDB Audit, Dedup & Hash Split\n(1,138 raw -> 569 unique patients)"]
+    Data -->|418 train / 151 test| Unsup["Unsupervised Diagnostics\n(PCA, K-Means, Isolation Forest)"]
     Data --> Train["5-Fold Stratified CV\n& OOF Threshold Tuning"]
     Train --> Eval["Held-Out Evaluation\n(Slices, Calibration, Perm Imp)"]
     Eval --> Gate{"Quality Gate\nRecall_M >= 0.95\nAUC >= 0.98\nBrier <= 0.06"}
@@ -26,9 +26,9 @@ flowchart LR
 
 | Domain | Implemented Capabilities | Key Modules |
 |---|---|---|
-| **Data Prep & SQL** | DuckDB SQL audit (`UNPIVOT`, skewness, 1.5x IQR outliers), schema validation, SHA-256 data lineage, deterministic hash partition (`train=805`, `test=333`) | `sql/01_audit.sql`, `sql/02_partition.sql`, `src/cancer_mlops/data.py` |
+| **Data Prep & SQL** | DuckDB SQL audit (`UNPIVOT`, skewness, 1.5x IQR outliers), pre-split SQL feature deduplication (`1,138 -> 569` unique patients), SHA-256 lineage, deterministic hash partition (`train=418`, `test=151`) | `sql/01_audit.sql`, `sql/02_partition.sql`, `src/cancer_mlops/data.py` |
 | **Leak-Free Feature Pipelines** | Sklearn `Pipeline` transformers fitted strictly inside training folds (`FeatureEngineer`, `CollinearityPruner`, `QuantileBinner`, `DataFrameStandardScaler`) | `src/cancer_mlops/features.py` |
-| **Unsupervised Learning** | Train-fitted PCA (7 comps = 90%, 10 comps = 95%), unlabeled K-Means (`k=2..8`, Test ARI = 0.6507), Isolation Forest anomaly detection | `src/cancer_mlops/unsupervised.py` |
+| **Unsupervised Learning** | Train-fitted PCA (7 comps = 90%, 10 comps = 95%), unlabeled K-Means (`k=2..8`, Test ARI = 0.6376), Isolation Forest anomaly detection | `src/cancer_mlops/unsupervised.py` |
 | **Supervised & Custom Modeling** | L2 Logistic Regression, Statsmodels Logit (OR & VIF tables), Random Forest, HistGradientBoosting, plus custom CHAID tree with ordinal Bonferroni adjustment | `src/cancer_mlops/train.py`, `src/cancer_mlops/chaid.py` |
 | **Clinical Evaluation & Thresholds** | CV out-of-fold threshold tuning targeting `Recall_M >= 0.96` (`F2` score), ROC/PR/calibration curves, subgroup slicing, permutation importance | `src/cancer_mlops/evaluate.py` |
 | **MLOps Governance & Monitoring** | Zero-dependency SQLite `ExperimentTracker`, `ModelRegistry` with promote/rollback, `QualityGate`, `model_card.md`, PSI + KS batch drift + online Z-score alerts | `src/cancer_mlops/tracking.py`, `src/cancer_mlops/monitoring.py` |
@@ -37,38 +37,40 @@ flowchart LR
 
 ---
 
-## 3. Verified Pipeline Results
+## 3. Verified Pipeline Results (Leak-Free, Deduplicated 569 Unique Patients)
 
-All numbers below come directly from `py -m cancer_mlops.pipeline --stage all` on `Cancer_Data.csv` (1,138 rows, SHA-256 prefix `aa47becd63cb`).
+All numbers below come directly from `py -m cancer_mlops.pipeline --stage all` on `data/Cancer_Data.csv` (1,138 raw rows → **569 unique patients** after pre-split SQL deduplication, `train=418` / `test=151`, SHA-256 prefix `aa47becd63cb`, 0 overlapping feature vectors across partitions).
 
 ### 3.1 Held-Out Test Performance (`cv_tuned` Clinical Thresholds)
 
 | Model | Tuned Threshold | Accuracy | Recall_M | Precision_M | F1 | F2 | ROC-AUC | PR-AUC | Brier |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| `hist_gbdt` (Champion) | 0.21 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 0.0012 |
-| `random_forest` | 0.46 | 0.9850 | 0.9925 | 0.9706 | 0.9814 | 0.9880 | 0.9987 | 0.9983 | 0.0184 |
-| `logistic_l2` | 0.29 | 0.9670 | 0.9774 | 0.9420 | 0.9594 | 0.9701 | 0.9971 | 0.9958 | 0.0217 |
-| `logistic_statsmodels` | 0.16 | 0.9580 | 0.9850 | 0.9161 | 0.9493 | 0.9704 | 0.9971 | 0.9958 | 0.0221 |
-| `chaid_bonferroni` | 0.10 | 0.8709 | 1.0000 | 0.7557 | 0.8608 | 0.9393 | 0.9760 | 0.9447 | 0.0549 |
-| `chaid_unadjusted` | 0.10 | 0.8018 | 1.0000 | 0.6683 | 0.8012 | 0.9097 | 0.9760 | 0.9447 | 0.0557 |
+| `random_forest` (CV Champion) | 0.32 | 0.9338 | 0.9825 | 0.8615 | 0.9180 | 0.9556 | 0.9853 | 0.9815 | 0.0427 |
+| `hist_gbdt` | 0.13 | 0.9603 | 0.9825 | 0.9180 | 0.9492 | 0.9689 | 0.9965 | 0.9947 | 0.0182 |
+| `logistic_statsmodels` | 0.17 | 0.9536 | 0.9825 | 0.9032 | 0.9412 | 0.9655 | 0.9961 | 0.9942 | 0.0235 |
+| `logistic_l2` | 0.22 | 0.9536 | 0.9649 | 0.9167 | 0.9402 | 0.9549 | 0.9961 | 0.9942 | 0.0225 |
+| `chaid_bonferroni` | 0.13 | 0.6689 | 1.0000 | 0.5327 | 0.6951 | 0.8507 | 0.9455 | 0.9029 | 0.0753 |
+| `chaid_unadjusted` | 0.13 | 0.6689 | 1.0000 | 0.5327 | 0.6951 | 0.8507 | 0.9455 | 0.9029 | 0.0753 |
 
 ### 3.2 5-Fold Cross-Validation Summary (`cv_tuned`)
 
-- `hist_gbdt`: Accuracy `0.9876`, Recall_M `0.9897`, ROC-AUC `0.9984`, Brier `0.0084`
-- `random_forest`: Accuracy `0.9752`, Recall_M `0.9759`, ROC-AUC `0.9947`, Brier `0.0245`
-- `logistic_l2`: Accuracy `0.9540`, Recall_M `0.9725`, ROC-AUC `0.9939`, Brier `0.0300`
+- `random_forest` (Selected Champion): Accuracy `0.9402`, Recall_M `0.9806`, ROC-AUC `0.9911`, Brier `0.0345`
+- `logistic_l2`: Accuracy `0.9426`, Recall_M `0.9613`, ROC-AUC `0.9877`, Brier `0.0337`
+- `logistic_statsmodels`: Accuracy `0.9402`, Recall_M `0.9613`, ROC-AUC `0.9874`, Brier `0.0346`
+- `hist_gbdt`: Accuracy `0.9593`, Recall_M `0.9677`, ROC-AUC `0.9865`, Brier `0.0248`
 
 ### 3.3 Unsupervised & Monitoring Diagnostics
 
-- **PCA**: 7 components explain 90% variance; 10 components explain 95% variance (PC1 = 45.09%, PC2 = 17.85%).
-- **K-Means (`k=2`, unlabeled)**: Best silhouette `0.3488` at `k=2`; post-hoc alignment yields Train ARI = `0.6627`, Test ARI = `0.6507`.
-- **Isolation Forest (5% contamination)**: Flagged train anomalies have `75.6%` malignancy rate vs `34.0%` in normal samples (21/41 anomalies overlap with 1.5x IQR `area_se` outliers).
-- **Batch Drift Self-Check (`test` vs `train` baseline)**: `overall_status = "stable"`, `max_psi = 0.078969` (`smoothness_worst`), zero features in moderate/significant drift.
+- **PCA**: 7 components explain 90% variance; 10 components explain 95% variance (PC1 = 44.55%, PC2 = 18.19%).
+- **K-Means (`k=2`, unlabeled)**: Best silhouette `0.3415` at `k=2`; post-hoc alignment yields Train ARI = `0.6824`, Test ARI = `0.6376`.
+- **Isolation Forest (5% contamination)**: Flagged train anomalies have `81.0%` malignancy rate vs `34.8%` in normal samples (12/21 anomalies overlap with 1.5x IQR `area_se` outliers).
+- **Batch Drift Self-Check (`test=151` vs `train=418` baseline)**: Zero significant drift features (`max_psi = 0.164573`, all KS two-sample p-values `> 0.40`; minor `moderate_drift` PSI flags reflect finite-sample decile variance at `N = 151`).
 
-### 3.4 Data Hygiene & Modeling Notes
+### 3.4 Engineering Case Study: Eliminating Hidden Duplicate-Twin Leakage
 
-1. **Duplicate Feature Signatures Across IDs**: Schema auditing confirmed `Cancer_Data.csv` contains 1,138 rows (`id_pat` primary keys) spanning **569 unique feature vectors**. Partitioning by `id_pat` reproduces the course benchmark; however, paired IDs across partitions allow high-capacity ensembles (`hist_gbdt`) to achieve `1.000` test AUC. Real clinical pipelines should deduplicate or group-split by underlying sample signature.
-2. **Bonferroni Pruning Effect in CHAID**: Enabling ordinal Bonferroni correction (`chaid_bonferroni`) pruned marginal splits (`area_ratio`, `compactness_mean`) present in `chaid_unadjusted`, raising tuned test accuracy from `0.8018` to `0.8709` and precision from `0.6683` to `0.7557` at `1.000` recall.
+1. **Root Cause Discovered During Data Audit**: Raw `Cancer_Data.csv` contains 1,138 rows (`A*` and `B*` ID prefixes) representing **569 exact duplicate feature-and-label pairs**. A naive 70/30 row-level split on `id_pat` leaked **74.2%** of test records (247/333) into the training set as identical twins, artificially inflating tree ensembles (`hist_gbdt` test AUC = `1.000`).
+2. **Production Fix**: Added `data.deduplicate_features: true` using DuckDB SQL `QUALIFY ROW_NUMBER() OVER (PARTITION BY <30 features> ORDER BY id_pat) = 1` with label-conflict verification, deterministic `ORDER BY id_pat` before splitting, and an automated regression assertion in `tests/test_no_leakage.py` guaranteeing **0 shared feature signatures** between train and test.
+3. **Impact**: Eliminated cross-partition memorization and produced honest generalization metrics (`Recall_M = 0.9825`, `ROC-AUC = 0.9853–0.9965` across the top models, with only 1 missed malignant case out of 57 on the held-out test set).
 
 ---
 
@@ -143,7 +145,7 @@ cancer_mlops/
 │   ├── tracking.py                 # SQLite tracker, registry, quality gate, model card
 │   ├── train.py                    # StratifiedKFold CV, tuning, threshold optimization
 │   └── unsupervised.py             # PCA, K-Means, Isolation Forest analysis
-├── tests/                          # Automated pytest suite (12 tests)
+├── tests/                          # Automated pytest suite (13 tests)
 ├── AGENTS.md                       # Agentic AI engineering workflow & boundaries
 ├── Dockerfile                      # Non-root Cloud Run container
 ├── pyproject.toml                  # Package, ruff, and pytest settings

@@ -17,6 +17,7 @@ class DataConfig(BaseModel):
     id_col: str = "id_pat"
     target_col: str = "diagnosis"
     positive_label: str = "M"
+    deduplicate_features: bool = True
     train_pct: int = Field(default=70, ge=10, le=90)
     hash_mod: int = Field(default=100, ge=10)
 

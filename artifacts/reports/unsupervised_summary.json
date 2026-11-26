@@ -3,50 +3,50 @@
     "n_features": 30,
     "n_components_90pct": 7,
     "n_components_95pct": 10,
-    "pc1_var_ratio": 0.4509,
-    "pc2_var_ratio": 0.1785,
+    "pc1_var_ratio": 0.4455,
+    "pc2_var_ratio": 0.1819,
     "pc1_top_loadings": [
       {
         "feature": "concave_points_mean",
-        "loading": 0.2587
+        "loading": 0.2606
       },
       {
         "feature": "concavity_mean",
-        "loading": 0.2567
+        "loading": 0.2586
       },
       {
         "feature": "concave_points_worst",
-        "loading": 0.2498
+        "loading": 0.2508
       },
       {
         "feature": "compactness_mean",
-        "loading": 0.2387
+        "loading": 0.2413
       },
       {
         "feature": "perimeter_worst",
-        "loading": 0.2359
+        "loading": 0.2354
       }
     ],
     "pc2_top_loadings": [
       {
         "feature": "fractal_dimension_mean",
-        "loading": 0.3736
+        "loading": 0.3665
       },
       {
         "feature": "fractal_dimension_se",
-        "loading": 0.2854
+        "loading": 0.2823
       },
       {
         "feature": "fractal_dimension_worst",
-        "loading": 0.2776
+        "loading": 0.2713
       },
       {
         "feature": "radius_mean",
-        "loading": -0.2396
+        "loading": -0.2424
       },
       {
-        "feature": "area_mean",
-        "loading": -0.2358
+        "feature": "compactness_se",
+        "loading": 0.2403
       }
     ]
   },
@@ -54,59 +54,59 @@
     "k_sweep": [
       {
         "k": 2,
-        "inertia": 16302.512470310725,
-        "silhouette": 0.3488
+        "inertia": 8452.792161593294,
+        "silhouette": 0.3415
       },
       {
         "k": 3,
-        "inertia": 14271.936052630444,
-        "silhouette": 0.3149
+        "inertia": 7433.729269211446,
+        "silhouette": 0.3061
       },
       {
         "k": 4,
-        "inertia": 13135.275343521595,
-        "silhouette": 0.2803
+        "inertia": 6818.492115946165,
+        "silhouette": 0.2714
       },
       {
         "k": 5,
-        "inertia": 12122.22150049521,
-        "silhouette": 0.1577
+        "inertia": 6258.359734189508,
+        "silhouette": 0.1627
       },
       {
         "k": 6,
-        "inertia": 11282.831597807297,
-        "silhouette": 0.1664
+        "inertia": 5877.042005648823,
+        "silhouette": 0.168
       },
       {
         "k": 7,
-        "inertia": 10609.587162906262,
-        "silhouette": 0.1582
+        "inertia": 5486.341988643714,
+        "silhouette": 0.1602
       },
       {
         "k": 8,
-        "inertia": 10119.962926295248,
-        "silhouette": 0.1493
+        "inertia": 5246.206761138988,
+        "silhouette": 0.1464
       }
     ],
     "best_k_by_silhouette": 2,
-    "best_silhouette": 0.3488,
+    "best_silhouette": 0.3415,
     "k2_posthoc_alignment": {
-      "train_ari": 0.6627,
-      "train_nmi": 0.5393,
-      "test_ari": 0.6507,
-      "test_nmi": 0.534
+      "train_ari": 0.6824,
+      "train_nmi": 0.5622,
+      "test_ari": 0.6376,
+      "test_nmi": 0.5244
     }
   },
   "isolation_forest": {
     "contamination": 0.05,
-    "train_anomalies": 41,
-    "train_anomaly_rate": 0.0509,
-    "test_anomalies": 25,
-    "test_anomaly_rate": 0.0751,
-    "train_malignant_rate_in_anomalies": 0.7561,
-    "train_malignant_rate_in_normal": 0.3403,
-    "test_malignant_rate_in_anomalies": 0.68,
-    "train_iqr_area_se_outliers": 90,
-    "overlap_with_area_se_iqr": 21
+    "train_anomalies": 21,
+    "train_anomaly_rate": 0.0502,
+    "test_anomalies": 7,
+    "test_anomaly_rate": 0.0464,
+    "train_malignant_rate_in_anomalies": 0.8095,
+    "train_malignant_rate_in_normal": 0.3476,
+    "test_malignant_rate_in_anomalies": 0.7143,
+    "train_iqr_area_se_outliers": 47,
+    "overlap_with_area_se_iqr": 12
   }
 }

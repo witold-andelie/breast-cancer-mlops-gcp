@@ -1,19 +1,22 @@
 {
   "data_uri": "D:\\CS_materials\\data-mining\\semester_project\\cancer_mlops\\data\\Cancer_Data.csv",
   "data_sha256": "aa47becd63cb0ef6f9fd7457bbc67be1bb0d58da61fd341dd0981cbbe75dc2c9",
+  "raw_rows": 1138,
+  "deduplicate_features": true,
+  "duplicates_removed": 569,
   "schema": {
-    "n_rows": 1138,
+    "n_rows": 569,
     "n_cols": 34,
     "n_numeric_features": 30,
     "unique_feature_vectors": 569,
     "total_nulls": 0,
     "class_counts": {
-      "B": 714,
-      "M": 424
+      "B": 357,
+      "M": 212
     }
   },
-  "train_rows": 805,
-  "test_rows": 333,
+  "train_rows": 418,
+  "test_rows": 151,
   "raw_numeric_features": [
     "radius_mean",
     "texture_mean",
@@ -465,22 +468,22 @@
     {
       "partition": "test",
       "diagnosis": "B",
-      "n": 200
+      "n": 94
     },
     {
       "partition": "test",
       "diagnosis": "M",
-      "n": 133
+      "n": 57
     },
     {
       "partition": "train",
       "diagnosis": "B",
-      "n": 514
+      "n": 263
     },
     {
       "partition": "train",
       "diagnosis": "M",
-      "n": 291
+      "n": 155
     }
   ]
 }

@@ -10,7 +10,7 @@ from cancer_mlops.features import CollinearityPruner, FeatureEngineer, QuantileB
 from cancer_mlops.train import optimize_threshold
 
 
-def test_deterministic_partition_disjoint(tmp_path) -> None:
+def test_deterministic_partition_disjoint_and_deduplicated(tmp_path) -> None:
     cfg = load_config()
     cfg.artifacts.root_dir = str(tmp_path)
     train_df, test_df, audit = load_and_partition(cfg)
@@ -18,8 +18,26 @@ def test_deterministic_partition_disjoint(tmp_path) -> None:
     train_ids = set(train_df[cfg.data.id_col])
     test_ids = set(test_df[cfg.data.id_col])
     assert train_ids.isdisjoint(test_ids)
-    assert len(train_ids) + len(test_ids) == audit["schema"]["n_rows"]
-    assert audit["schema"]["n_rows"] == 1138
+    assert audit["raw_rows"] == 1138
+    assert audit["duplicates_removed"] == 569
+    assert audit["schema"]["n_rows"] == 569
+    assert len(train_ids) + len(test_ids) == 569
+
+    # Zero duplicate feature vectors may leak across train and test partitions
+    raw_cols = audit["raw_numeric_features"]
+    tr_sigs = set(map(tuple, train_df[raw_cols].astype(float).itertuples(index=False, name=None)))
+    te_sigs = set(map(tuple, test_df[raw_cols].astype(float).itertuples(index=False, name=None)))
+    assert tr_sigs.isdisjoint(te_sigs)
+
+
+def test_raw_unpruned_mode_keeps_all_rows(tmp_path) -> None:
+    cfg = load_config()
+    cfg.artifacts.root_dir = str(tmp_path)
+    cfg.data.deduplicate_features = False
+    train_df, test_df, audit = load_and_partition(cfg)
+    assert audit["raw_rows"] == 1138
+    assert audit["duplicates_removed"] == 0
+    assert len(train_df) + len(test_df) == 1138
 
 
 def test_feature_transformers_invariant_to_test_data(tmp_path) -> None:

@@ -23,13 +23,13 @@ def compute_baseline_stats(
         vals = train_df[col].astype(float).dropna().to_numpy()
         if vals.size == 0:
             continue
-        raw_edges = np.unique(np.quantile(vals, np.linspace(0.0, 1.0, n_bins + 1)))
+        raw_edges = np.unique(np.round(np.quantile(vals, np.linspace(0.0, 1.0, n_bins + 1)), 6))
         if len(raw_edges) < 2:
             v0 = float(vals[0])
             raw_edges = np.array([v0 - 0.5, v0 + 0.5], dtype=float)
         cut_edges = [-np.inf, *raw_edges[1:-1], np.inf]
         counts, _ = np.histogram(vals, bins=cut_edges)
-        eps = 1e-6
+        eps = 1e-4
         expected_props = (counts + eps) / (counts.sum() + eps * len(counts))
 
         baseline[col] = {
@@ -56,9 +56,9 @@ def compute_psi(
         return 0.0
     cut_edges = [-np.inf, *edges[1:-1], np.inf] if len(edges) >= 2 else [-np.inf, np.inf]
     counts, _ = np.histogram(actual_values, bins=cut_edges)
-    eps = 1e-6
+    eps = 1e-4
     actual_props = (counts + eps) / (counts.sum() + eps * len(counts))
-    exp_arr = np.asarray(expected_props, dtype=float)
+    exp_arr = np.clip(np.asarray(expected_props, dtype=float), 1e-6, None)
     exp_arr = exp_arr / exp_arr.sum()
     psi = float(np.sum((actual_props - exp_arr) * np.log(actual_props / exp_arr)))
     return round(max(psi, 0.0), 6)

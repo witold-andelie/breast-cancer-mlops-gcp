@@ -451,6 +451,9 @@ def generate_model_card(
     unique_vecs = audit_summary["schema"].get(
         "unique_feature_vectors", audit_summary["schema"]["n_rows"]
     )
+    raw_rows = audit_summary.get("raw_rows", audit_summary["schema"]["n_rows"])
+    dedup_removed = audit_summary.get("duplicates_removed", 0)
+    dedup_enabled = audit_summary.get("deduplicate_features", False)
 
     gate_bullets = "\n".join(f"- {r}" for r in gate_reasons)
     lines = [
@@ -461,6 +464,9 @@ def generate_model_card(
         f"- **Run ID**: `{production_meta['run_id']}`",
         f"- **Created At (UTC)**: `{production_meta['created_at']}`",
         f"- **Dataset SHA-256**: `{schema.get('data_sha256', '')}`",
+        f"- **Deduplication**: `deduplicate_features={dedup_enabled}` "
+        f"(raw={raw_rows} rows -> clean={audit_summary['schema']['n_rows']} unique patients, "
+        f"removed={dedup_removed} duplicate twins)",
         f"- **Partition**: Train = {audit_summary['train_rows']} rows, "
         f"Test = {audit_summary['test_rows']} rows (deterministic DuckDB hash split)",
         f"- **Clinical Decision Threshold**: `{m['threshold']}` "
@@ -493,10 +499,10 @@ def generate_model_card(
         "## 7. Intended Use, Limitations & Ethical Notes",
         "- **Intended Use**: Decision-support triage prototype for breast mass malignancy scoring; "
         "positive (`M`) misses carry high clinical cost, so recall is prioritized over accuracy.",
-        f"- **Data Hygiene Note**: The source table has {audit_summary['schema']['n_rows']} rows "
-        f"({unique_vecs} unique feature vectors across paired IDs). Splitting on `id_pat` matches "
-        "the course benchmark; real clinical deployment should deduplicate or group-split by "
-        "patient/sample signature.",
+        f"- **Data Hygiene & Leakage Guard**: Raw CSV contains {raw_rows} rows across "
+        f"{unique_vecs} unique feature vectors (`A`/`B` paired ID prefixes). "
+        "Pre-split SQL deduplication removes exact duplicate twins before partitioning so zero "
+        "patient feature signatures leak between train and test.",
         "- **Limitations**: Trained on static diagnostic measurements; production use requires "
         "continuous PSI/KS drift checks and clinician oversight.",
     ]

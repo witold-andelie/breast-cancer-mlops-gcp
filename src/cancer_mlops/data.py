@@ -157,9 +157,34 @@ def load_and_partition(
             "hash_mod": str(cfg.data.hash_mod),
         }
         audit_results = run_sql_queries(con, SQL_DIR / "01_audit.sql", sql_params)
+        raw_row_count = int(con.execute("SELECT COUNT(*) FROM src").fetchone()[0])
+
+        if cfg.data.deduplicate_features:
+            col_expr = ", ".join(f'"{c}"' for c in numeric)
+            conflicts = int(
+                con.execute(
+                    f'SELECT COUNT(*) FROM (SELECT {col_expr} FROM src '
+                    f'GROUP BY {col_expr} HAVING COUNT(DISTINCT "{cfg.data.target_col}") > 1)'
+                ).fetchone()[0]
+            )
+            if conflicts > 0:
+                raise DataValidationError(
+                    f"Detected {conflicts} identical feature vectors with conflicting labels."
+                )
+            con.execute(
+                "CREATE OR REPLACE VIEW src_clean AS "
+                "SELECT * FROM src "
+                f"QUALIFY ROW_NUMBER() OVER ("
+                f'PARTITION BY {col_expr} ORDER BY "{cfg.data.id_col}") = 1'
+            )
+        else:
+            con.execute("CREATE OR REPLACE VIEW src_clean AS SELECT * FROM src")
+
         part_results = run_sql_queries(con, SQL_DIR / "02_partition.sql", sql_params)
 
-        full_df = con.execute("SELECT * FROM vw_dataset").fetchdf()
+        full_df = con.execute(
+            f'SELECT * FROM vw_dataset ORDER BY "{cfg.data.id_col}"'
+        ).fetchdf()
     finally:
         con.close()
 
@@ -179,9 +204,24 @@ def load_and_partition(
     raw_numeric_features = [
         c for c in full_df.columns if c not in {id_col, cfg.data.target_col, "y_m", "partition"}
     ]
+    if cfg.data.deduplicate_features:
+        tr_rows = train_df[raw_numeric_features].astype(float).itertuples(index=False, name=None)
+        te_rows = test_df[raw_numeric_features].astype(float).itertuples(index=False, name=None)
+        tr_sigs = set(map(tuple, tr_rows))
+        te_sigs = set(map(tuple, te_rows))
+        overlap_cnt = len(tr_sigs & te_sigs)
+        if overlap_cnt > 0:
+            raise DataValidationError(
+                f"Detected {overlap_cnt} duplicate feature vectors leaking across train/test."
+            )
+
+    duplicates_removed = raw_row_count - int(len(full_df))
     audit_summary = {
         "data_uri": data_uri,
         "data_sha256": data_sha256,
+        "raw_rows": raw_row_count,
+        "deduplicate_features": cfg.data.deduplicate_features,
+        "duplicates_removed": duplicates_removed,
         "schema": schema_stats,
         "train_rows": int(len(train_df)),
         "test_rows": int(len(test_df)),
